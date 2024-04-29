@@ -7,14 +7,26 @@ const usePlaylists = () => {
     recentPlaylists: [],
     favorites: [],
   });
+  const [error, setError] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
   const getPlaylistById = async (playlistId, force = false) => {
     if (state.playlists[playlistId] && !force) {
       return;
     }
 
-    let result = await getPlaylist(playlistId);
+    setIsLoading(true);
+    let result;
     let cid, ct;
+
+    try {
+      result = await getPlaylist(playlistId);
+      setError("");
+    } catch (err) {
+      setError(err?.response?.data.error.message || "Something went wrong!");
+    } finally {
+      setIsLoading(false);
+    }
 
     result = result.map((item) => {
       const {
@@ -74,12 +86,14 @@ const usePlaylists = () => {
   };
 
   return {
+    error,
+    isLoading,
+    addToFavorites,
+    getPlaylistById,
+    addRecent: addToRecent,
     playlists: state.playlists,
     favorites: getPlaylistsByIds(state.favorites),
     recentPlaylists: getPlaylistsByIds(state.recentPlaylists),
-    getPlaylistById,
-    addRecent: addToRecent,
-    addToFavorites,
   };
 };
 
