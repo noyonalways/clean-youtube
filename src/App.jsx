@@ -19,10 +19,6 @@ function App() {
     <>
       <CssBaseline />
       <Navbar />
-      <h1>Hello Clean YouTube</h1>
-      <p>{isLoading && "Loading......."}</p>
-      <p>{error}</p>
-      {/* <div>{playlists["PL_XxuZqN0xVD0op-QDEgyXFA4fRPChvkl"]?.items.length}</div> */}
     </>
   );
 }
