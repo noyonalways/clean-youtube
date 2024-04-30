@@ -14,6 +14,13 @@ function App() {
       <Navbar getPlaylistById={getPlaylistById} />
       <Container maxWidth="lg">
         <h1>Playlists</h1>
+        {!error && playlistArray.length === 0 && (
+          <div>
+            There is no Playlist added. Please add playlist by clicking the
+            &apos;ADD PLAYLIST&apos; Button
+          </div>
+        )}
+        {error && <div>{error}</div>}
         {isLoading ? (
           <Box
             display="flex"
