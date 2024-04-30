@@ -26,7 +26,7 @@ export const getPlaylist = async (playlistId) => {
     description: playlistDescription,
     thumbnails,
     channelTitle,
-  } = data?.items[0]?.snippet;
+  } = data?.items[0]?.snippet || {};
 
   playlistItems = playlistItems.map((item) => {
     const {
@@ -44,12 +44,13 @@ export const getPlaylist = async (playlistId) => {
   });
 
   return {
+    playlistId,
     playlistTitle,
     channelId,
     playlistDescription,
     channelTitle,
     playlistItems,
-    playlistThumbnail: thumbnails.default,
+    playlistThumbnail: thumbnails.standard,
   };
 };
 

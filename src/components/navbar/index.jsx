@@ -6,6 +6,7 @@ import Stack from "@mui/material/Stack";
 import { Button, Container } from "@mui/material";
 import PlayListForm from "../playlist-form";
 import { useState } from "react";
+import PropTypes from "prop-types";
 
 const Navbar = ({ getPlaylistById }) => {
   const [open, setOpen] = useState(false);
@@ -24,9 +25,9 @@ const Navbar = ({ getPlaylistById }) => {
 
   return (
     <Box sx={{ flexGrow: 1 }}>
-      <AppBar position="sticky" color="default">
+      <AppBar position="fixed" color="default">
         <Container maxWidth="lg">
-          <Toolbar>
+          <Toolbar style={{ padding: "10px 0 10px 0" }}>
             <Stack sx={{ flexGrow: 1 }}>
               <Typography variant="h5">Clean YouTube</Typography>
               <Typography variant="body2">By Full-stack Army</Typography>
@@ -44,6 +45,10 @@ const Navbar = ({ getPlaylistById }) => {
       </AppBar>
     </Box>
   );
+};
+
+Navbar.propTypes = {
+  getPlaylistById: PropTypes.func.isRequired,
 };
 
 export default Navbar;
