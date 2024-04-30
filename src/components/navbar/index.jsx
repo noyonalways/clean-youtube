@@ -7,7 +7,7 @@ import { Button, Container } from "@mui/material";
 import PlayListForm from "../playlist-form";
 import { useState } from "react";
 
-const Navbar = () => {
+const Navbar = ({ getPlaylistById }) => {
   const [open, setOpen] = useState(false);
 
   const handleClickOpen = () => {
@@ -19,7 +19,7 @@ const Navbar = () => {
   };
 
   const getPlaylistId = (playlistId) => {
-    console.log(playlistId);
+    getPlaylistById(playlistId);
   };
 
   return (

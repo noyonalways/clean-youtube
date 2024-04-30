@@ -6,6 +6,7 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import { useState } from "react";
+import PropTypes from "prop-types";
 
 const PlayListForm = ({ open, handleClose, getPlayListId }) => {
   const [state, setState] = useState("");
@@ -59,8 +60,10 @@ const PlayListForm = ({ open, handleClose, getPlayListId }) => {
           />
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleClose}>Cancel</Button>
-          <Button onClick={handleSubmit} type="submit">
+          <Button variant="outlined" onClick={handleClose}>
+            Cancel
+          </Button>
+          <Button variant="outlined" onClick={handleSubmit} type="submit">
             Add
           </Button>
         </DialogActions>
@@ -70,3 +73,8 @@ const PlayListForm = ({ open, handleClose, getPlayListId }) => {
 };
 
 export default PlayListForm;
+PlayListForm.propTypes = {
+  open: PropTypes.bool.isRequired,
+  handleClose: PropTypes.func.isRequired,
+  getPlayListId: PropTypes.func.isRequired,
+};

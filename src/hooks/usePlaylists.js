@@ -1,5 +1,5 @@
 import { useState } from "react";
-import getPlaylist from "./../api/index";
+import { getPlaylist } from "./../api";
 
 const usePlaylists = () => {
   const [state, setState] = useState({
@@ -16,55 +16,22 @@ const usePlaylists = () => {
     }
 
     setIsLoading(true);
-    let result;
-    let cid, ct;
-
     try {
-      result = await getPlaylist(playlistId);
+      const playlist = await getPlaylist(playlistId);
       setError("");
+
+      setState((prev) => ({
+        ...prev,
+        playlists: {
+          ...prev.playlists,
+          [playlistId]: playlist,
+        },
+      }));
     } catch (err) {
       setError(err?.response?.data.error.message || "Something went wrong!");
     } finally {
       setIsLoading(false);
     }
-
-    result = result.map((item) => {
-      const {
-        channelId,
-        title,
-        description,
-        channelTitle,
-        thumbnails: { standard },
-      } = item.snippet;
-
-      if (!cid) {
-        cid = channelId;
-      }
-
-      if (!ct) {
-        ct = channelTitle;
-      }
-
-      return {
-        title,
-        description,
-        thumbnail: standard,
-        contentDetails: item.contentDetails,
-      };
-    });
-
-    setState((prev) => ({
-      ...prev,
-      playlists: {
-        ...prev.playlists,
-        [playlistId]: {
-          items: result,
-          playlistId,
-          channelId: cid,
-          channelTitle: ct,
-        },
-      },
-    }));
   };
 
   const addToFavorites = (playlistId) => {
