@@ -1,5 +1,5 @@
 import { useState } from "react";
-import getPlaylist from "./../api/index";
+import { getPlaylist } from "./../api";
 
 const usePlaylists = () => {
   const [state, setState] = useState({
@@ -7,52 +7,31 @@ const usePlaylists = () => {
     recentPlaylists: [],
     favorites: [],
   });
+  const [error, setError] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
   const getPlaylistById = async (playlistId, force = false) => {
     if (state.playlists[playlistId] && !force) {
       return;
     }
 
-    let result = await getPlaylist(playlistId);
-    let cid, ct;
+    setIsLoading(true);
+    try {
+      const playlist = await getPlaylist(playlistId);
+      setError("");
 
-    result = result.map((item) => {
-      const {
-        channelId,
-        title,
-        description,
-        channelTitle,
-        thumbnails: { standard },
-      } = item.snippet;
-
-      if (!cid) {
-        cid = channelId;
-      }
-
-      if (!ct) {
-        ct = channelTitle;
-      }
-
-      return {
-        title,
-        description,
-        thumbnail: standard,
-        contentDetails: item.contentDetails,
-      };
-    });
-
-    setState((prev) => ({
-      ...prev,
-      playlists: {
-        ...prev.playlists,
-        [playlistId]: {
-          items: result,
-          playlistId,
-          channelId: cid,
-          channelTitle: ct,
+      setState((prev) => ({
+        ...prev,
+        playlists: {
+          ...prev.playlists,
+          [playlistId]: playlist,
         },
-      },
-    }));
+      }));
+    } catch (err) {
+      setError(err?.response?.data.error.message || "Something went wrong!");
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const addToFavorites = (playlistId) => {
@@ -74,12 +53,14 @@ const usePlaylists = () => {
   };
 
   return {
+    error,
+    isLoading,
+    addToFavorites,
+    getPlaylistById,
+    addRecent: addToRecent,
     playlists: state.playlists,
     favorites: getPlaylistsByIds(state.favorites),
     recentPlaylists: getPlaylistsByIds(state.recentPlaylists),
-    getPlaylistById,
-    addRecent: addToRecent,
-    addToFavorites,
   };
 };
 
